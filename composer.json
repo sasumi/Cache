@@ -1,8 +1,8 @@
 {
-	"name": "lfphp/craw",
-	"description": "A lite craw for PHP. make log easier to use.",
+	"name": "lfphp/cache",
+	"description": "A lite cache for PHP",
 	"keywords": [
-		"craw",
+		"cache",
 		"lfphp"
 	],
 	"homepage": "http://blog.yikepi.com/",
@@ -16,7 +16,7 @@
 		}
 	],
 	"support": {
-		"issues": "https://github.com/sasumi/Craw/issues"
+		"issues": "https://github.com/sasumi/cache/issues"
 	},
 	"require": {
 		"php": ">=5.6",
