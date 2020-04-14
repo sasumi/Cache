@@ -32,28 +32,57 @@ class CacheRedis extends CacheAdapter{
 		}
 	}
 
+	/**
+	 * @param $db_index
+	 * @return bool
+	 */
 	public function select($db_index){
 		return $this->redis->select($db_index);
 	}
 
+	/**
+	 * swap database
+	 * @param $from_db_index
+	 * @param $to_db_index
+	 * @return bool
+	 */
 	public function swapDb($from_db_index, $to_db_index){
 		return $this->redis->swapdb($from_db_index, $to_db_index);
 	}
 
+	/**
+	 * set cache
+	 * @param $cache_key
+	 * @param $data
+	 * @param int $expired
+	 * @return bool|mixed
+	 */
 	public function set($cache_key, $data, $expired = 60){
 		$data = serialize($data);
 		return $this->redis->setex($cache_key, $expired, $data);
 	}
 
+	/**
+	 * get data
+	 * @param $cache_key
+	 * @return mixed|null
+	 */
 	public function get($cache_key){
 		$data = $this->redis->get($cache_key);
 		return $data === false ? null : unserialize($data);
 	}
 
+	/**
+	 * @param $cache_key
+	 * @return mixed|void
+	 */
 	public function delete($cache_key){
-		$this->redis->delete($cache_key);
+		$this->redis->del($cache_key);
 	}
 
+	/**
+	 * @return bool|mixed
+	 */
 	public function flush(){
 		return $this->redis->flushAll();
 	}
@@ -61,23 +90,18 @@ class CacheRedis extends CacheAdapter{
 	/**
 	 * 设置队列名称
 	 * @param $queueName
+	 * @return \LFPhp\Cache\CacheRedis
 	 */
 	public function setQueueName($queueName){
 		$this->queueName = $queueName;
-	}
-
-	/**
-	 * 删除队列
-	 */
-	public function del(){
-		return $this->redis->del($this->queueName);
+		return $this;
 	}
 
 	/**
 	 * 取得队列的长度
 	 */
 	public function lSize(){
-		$this->redis->lSize($this->queueName);
+		return $this->redis->lLen($this->queueName);
 	}
 
 	/**
@@ -85,22 +109,23 @@ class CacheRedis extends CacheAdapter{
 	 * @param $num
 	 * @return mixed
 	 */
-	public function lrang($num){
+	public function lRang($num){
 		return $this->redis->lRange($this->queueName, 0, $num);
 	}
 
 	/**
 	 * 给队列添加一个数据
 	 * @param $value
+	 * @return bool|int
 	 */
-	public function rpush($value){
-		$this->redis->rPush($this->queueName, $value);
+	public function rPush($value){
+		return $this->redis->rPush($this->queueName, $value);
 	}
 
 	/**
 	 * 从队列中取出一个数据
 	 */
-	public function lpop(){
+	public function lPop(){
 		return $this->redis->lPop($this->queueName);
 	}
 
@@ -110,7 +135,7 @@ class CacheRedis extends CacheAdapter{
 	 * @param number $stop 结束index
 	 * @return mixed
 	 */
-	public function ltrim($start, $stop){
+	public function lTrim($start, $stop){
 		return $this->redis->lTrim($this->queueName, $start, $stop);
 	}
 }
