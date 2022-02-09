@@ -1,33 +1,46 @@
 {
-	"name": "lfphp/cache",
-	"description": "A lite cache for PHP",
-	"keywords": [
-		"cache",
-		"lfphp"
-	],
-	"homepage": "http://blog.yikepi.com/",
-	"type": "library",
-	"license": "Apache-2.0",
-	"authors": [
-		{
-			"name": "Sasumi.H",
-			"email": "cnsasumi@outlook.com",
-			"homepage": "http://blog.yikepi.com/"
-		}
-	],
-	"support": {
-		"issues": "https://github.com/sasumi/cache/issues"
-	},
-	"require": {
-		"php": ">=5.6",
-		"ext-iconv": "*",
-		"ext-json": "*",
-		"lfphp/func": "~1.0.0"
-	},
-	"require-dev": {},
-	"autoload": {
-		"files": [
-			"autoload.php"
-		]
+  "name": "lfphp/cache",
+  "description": "A lite cache for PHP",
+  "keywords": [
+	"cache",
+	"lfphp"
+  ],
+  "homepage": "http://blog.yikepi.com/",
+  "type": "library",
+  "license": "Apache-2.0",
+  "authors": [
+	{
+	  "name": "Sasumi.H",
+	  "email": "cnsasumi@outlook.com",
+	  "homepage": "http://blog.yikepi.com/"
 	}
+  ],
+  "support": {
+	"issues": "https://github.com/sasumi/cache/issues"
+  },
+  "require": {
+	"php": ">=5.6",
+	"ext-iconv": "*",
+	"ext-json": "*",
+	"lfphp/func": "^1.0.0"
+  },
+  "require-dev": {
+	  "phpunit/phpunit": "9.2.6"
+  },
+  "autoload": {
+	"psr-4": {
+	  "LFPhp\\Cache\\": "src"
+	}
+  },
+  "autoload-dev": {
+	"psr-4": {
+	  "LFPhp\\Cache\\TestCase\\": "test"
+	}
+  },
+  "repositories" :{
+	"packagist": {
+	  "type": "composer",
+	  "url": "https://mirrors.aliyun.com/composer/"
+	}
+  }
 }

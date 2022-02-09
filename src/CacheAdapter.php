@@ -40,6 +40,7 @@ abstract class CacheAdapter implements CacheInterface{
 	 * @param int $expired_seconds 缓存过期时间
 	 * @param bool $refresh_cache 是否刷新缓存，默认false为仅在缓存过期时才更新
 	 * @return mixed
+	 * @throws \Exception
 	 */
 	final public function cache($key, callable $fetcher, $expired_seconds = 60, $refresh_cache = false){
 		$cache_class = get_called_class();
