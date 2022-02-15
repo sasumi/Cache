@@ -56,7 +56,7 @@ class CacheFile extends CacheAdapter{
 	 * @return string
 	 */
 	public function getFileName($cache_key){
-		return $this->getConfig('dir').md5($cache_key);
+		return $this->getConfig('dir').'/'.md5($cache_key);
 	}
 
 	/**
