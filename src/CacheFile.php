@@ -17,7 +17,7 @@ class CacheFile extends CacheAdapter{
 		}
 		if(!isset($config['dir']) || !$config['dir']){
 			$dir = sys_get_temp_dir();
-			$config['dir'] = $dir.'/cache/';
+			$config['dir'] = $dir.'/cache';
 		}
 		if(!is_dir($config['dir'])){
 			mkdir($config['dir'], 0777, true);;
