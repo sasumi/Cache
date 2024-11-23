@@ -14,7 +14,7 @@ class CacheVar extends CacheAdapter {
 		return $this->cache_key_prefix.$cache_key;
 	}
 
-	public function set($cache_key, $data, $_=0){
+	public function set($cache_key, $data, $expired=0){
 		$cache_key = $this->getCacheKey($cache_key);
 		self::$DATA_STORE[$cache_key] = $data;
 	}
