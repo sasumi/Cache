@@ -4,7 +4,7 @@ namespace LFPhp\Cache;
 use Exception;
 
 /**
- * Cache适配
+ * Cache Adapter
  * @package LFPhp\Cache
  */
 abstract class CacheAdapter implements CacheInterface{
@@ -12,7 +12,6 @@ abstract class CacheAdapter implements CacheInterface{
 	private $config;
 
 	/**
-	 * 构造器，禁止外部公开调用
 	 * @param array $config
 	 */
 	protected function __construct($config = []){
@@ -20,7 +19,7 @@ abstract class CacheAdapter implements CacheInterface{
 	}
 
 	/**
-	 * 单例
+	 * Singleton
 	 * @param array $config
 	 * @return static
 	 */
@@ -34,11 +33,11 @@ abstract class CacheAdapter implements CacheInterface{
 	}
 
 	/**
-	 * 快速调用方法，不提供配置参数传入
-	 * @param string $key 缓存key
-	 * @param callable $fetcher 数据获取回调
-	 * @param int $expired_seconds 缓存过期时间
-	 * @param bool $refresh_cache 是否刷新缓存，默认false为仅在缓存过期时才更新
+	 * Quick call method, no configuration parameters are provided
+	 * @param string $key Cache key
+	 * @param callable $fetcher Data acquisition callback, callback returns null, which is invalid data and is not stored in the cache
+	 * @param int $expired_seconds Cache expiration time
+	 * @param bool $refresh_cache Whether to refresh the cache, the default false is to update only when the cache expires
 	 * @return mixed
 	 * @throws \Exception
 	 */
@@ -50,20 +49,20 @@ abstract class CacheAdapter implements CacheInterface{
 
 		if($refresh_cache){
 			$data = call_user_func($fetcher);
-			$this->set($key, $data, $expired_seconds);
+			isset($data) && $this->set($key, $data, $expired_seconds);
 			return $data;
 		}
 
 		$data = $this->get($key);
 		if(!isset($data)){
 			$data = call_user_func($fetcher);
-			$this->set($key, $data, $expired_seconds);
+			isset($data) && $this->set($key, $data, $expired_seconds);
 		}
 		return $data;
 	}
 
 	/**
-	 * 分布式缓存存储
+	 * Distributed cache storage
 	 * @param $cache_prefix_key
 	 * @param array $data_list
 	 * @param int $expired
@@ -75,7 +74,7 @@ abstract class CacheAdapter implements CacheInterface{
 	}
 
 	/**
-	 * 获取配置
+	 * Get config
 	 * @param string $key
 	 * @return mixed
 	 */
@@ -87,7 +86,7 @@ abstract class CacheAdapter implements CacheInterface{
 	}
 
 	/**
-	 * 设置配置
+	 * Set config
 	 * @param $config
 	 */
 	public function setConfig($config){

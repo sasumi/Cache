@@ -2,9 +2,9 @@
 namespace LFPhp\Cache;
 
 /**
- * 文件缓存
- * 默认缓存在system temporary临时目录中
- * 默认开启进程内变量缓存，避免多次获取变量读取文件 config:cache_in_process
+ * File cache
+ * Default cache is in the system temporary directory
+ * Default in-process variable cache is enabled to avoid multiple access to variable read files config:cache_in_process
  * @package LFPhp\Cache
  */
 class CacheFile extends CacheAdapter{
@@ -26,15 +26,15 @@ class CacheFile extends CacheAdapter{
 	}
 
 	/**
-	 * 设置缓存
+	 * set cache
 	 * @param $cache_key
 	 * @param $data
 	 * @param int $expired
-	 * @return bool|int|mixed
+	 * @return false|int
 	 */
 	public function set($cache_key, $data, $expired = 60){
 		$file = $this->getFileName($cache_key);
-		$string = serialize(array(
+		$string = json_encode(array(
 			'cache_key' => $cache_key,
 			'expired'   => date('Y-m-d H:i:s', time()+$expired),
 			'data'      => $data,
@@ -51,16 +51,16 @@ class CacheFile extends CacheAdapter{
 	}
 
 	/**
-	 * 获取缓存文件名
+	 * get cache file name
 	 * @param $cache_key
 	 * @return string
 	 */
 	public function getFileName($cache_key){
-		return $this->getConfig('dir').'/'.md5($cache_key);
+		return $this->getConfig('dir').'/'.md5($cache_key).'.json';
 	}
 
 	/**
-	 * 获取缓存
+	 * get cache
 	 * @param $cache_key
 	 * @return null
 	 */
@@ -72,7 +72,7 @@ class CacheFile extends CacheAdapter{
 		if(file_exists($file)){
 			$string = file_get_contents($file);
 			if($string){
-				$data = unserialize($string);
+				$data = json_decode($string, true);
 				if($data && strtotime($data['expired'])>time()){
 					if($this->cache_in_process){
 						self::$process_cache[$cache_key] = $data['data'];
@@ -87,9 +87,9 @@ class CacheFile extends CacheAdapter{
 	}
 
 	/**
-	 * 删除缓存
+	 * delete cache
 	 * @param $cache_key
-	 * @return bool|mixed
+	 * @return bool
 	 */
 	public function delete($cache_key){
 		if(isset(self::$process_cache[$cache_key])){
@@ -103,7 +103,7 @@ class CacheFile extends CacheAdapter{
 	}
 
 	/**
-	 * 清空缓存
+	 * flush cache
 	 * flush cache dir
 	 */
 	public function flush(){

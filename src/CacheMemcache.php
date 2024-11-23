@@ -1,14 +1,14 @@
 <?php
 namespace LFPhp\Cache;
 
-use \Exception;
+use Exception;
 use Memcache as SysMem;
 
-class CacheMemcache extends CacheAdapter{
+class CacheMemcache extends CacheAdapter {
 	/** @var SysMem * */
-	private $cache;        //缓存对象
-	private $defaultHost = '127.0.0.1'; //默认服务器地址
-	private $defaultPort = 11211;       //默认端口号
+	private $cache;
+	private $defaultHost = '127.0.0.1'; //default host name
+	private $defaultPort = 11211;       //default port
 
 	public function __construct(array $config){
 		if(!extension_loaded('memcache')){
@@ -19,57 +19,58 @@ class CacheMemcache extends CacheAdapter{
 		$this->cache = new SysMem;
 		if(!empty($servers)){
 			foreach($servers as $server){
-				$this->addServe($server);
+				$this->addServer($server);
 			}
 		}else{
-			$this->addServe($this->defaultHost.':'.$this->defaultPort);
+			$this->addServer($this->defaultHost.':'.$this->defaultPort);
 		}
 		parent::__construct($config);
 	}
 
 	/**
-	 * @brief  添加服务器到连接池
-	 * @param  string $address 服务器地址
-	 * @return bool   true:成功;false:失败;
+	 * @brief  Adding a server to the connection pool
+	 * @param string $address add server
+	 * @throws \Exception
 	 */
-	private function addServe($address){
+	private function addServer($address){
 		list($host, $port) = explode(':', $address);
 		$port = $port ?: $this->defaultPort;
-		return $this->cache->addserver($host, $port);
+		if(!$this->cache->addserver($host, $port)){
+			throw new Exception('Add server fail:'.$host);
+		}
 	}
 
 	/**
-	 * @brief  写入缓存
-	 * @param  string $key 缓存的唯一key值
-	 * @param  mixed $data 要写入的缓存数据
-	 * @param int $expire 缓存数据失效时间,单位：秒
-	 * @return bool   true:成功;false:失败;
+	 * @brief Write to cache
+	 * @param string $cache_key Unique key value of cache
+	 * @param mixed $data Cache data to be written
+	 * @param int $expired Cache data expiration time, unit: seconds
+	 * @return bool true: success; false: failure;
 	 */
-	public function set($key, $data, $expire = 0){
-		return $this->cache->set($key, $data, MEMCACHE_COMPRESSED, $expire);
+	public function set($cache_key, $data, $expired = 0){
+		return $this->cache->set($cache_key, $data, MEMCACHE_COMPRESSED, $expired);
 	}
 
 	/**
-	 * @brief  读取缓存
-	 * @param  string $key 缓存的唯一key值,当要返回多个值时可以写成数组
-	 * @return mixed  读取出的缓存数据;null:没有取到数据;
+	 * @brief Read cache
+	 * @param string $cache_key Unique key value of cache, can be written as an array when multiple values are to be returned
+	 * @return array|false|string Cache data read out; null: no data is obtained;
 	 */
-	public function get($key){
-		return $this->cache->get($key);
+	public function get($cache_key){
+		return $this->cache->get($cache_key);
 	}
 
 	/**
-	 * @brief  删除缓存
-	 * @param  string $key 缓存的唯一key值
-	 * @param int|string $timeout 在间隔单位时间内自动删除,单位：秒
-	 * @return bool true:成功; false:失败;
+	 * @brief Delete cache
+	 * @param string $cache_key Unique key value of cache
+	 * @param int|string $timeout Automatically delete in interval unit time, unit: seconds
 	 */
-	public function delete($key, $timeout = 0){
-		return $this->cache->delete($key, $timeout);
+	public function delete($cache_key, $timeout = 0){
+		$this->cache->delete($cache_key, $timeout);
 	}
 
 	/**
-	 * @brief  删除全部缓存
+	 * @brief Delete all caches
 	 */
 	public function flush(){
 		$this->cache->flush();

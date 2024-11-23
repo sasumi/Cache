@@ -2,7 +2,7 @@
 namespace LFPhp\Cache;
 
 /**
- * 运行时内存变量缓存（进程内共享）
+ * Runtime memory variable cache (shared within the process)
  * Class CacheVar
  * @package LFPhp\Cache
  */

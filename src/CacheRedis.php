@@ -6,9 +6,9 @@ use Redis as SysRedis;
 
 class CacheRedis extends CacheAdapter{
 	/** @var \Redis */
-	private $redis = null;              //缓存对象
-	private $defaultHost = '127.0.0.1'; //默认服务器地址
-	private $defaultPort = 6379;        //默认端口号
+	private $redis = null;              //redis instance
+	private $defaultHost = '127.0.0.1'; //default host
+	private $defaultPort = 6379;        //port
 	private $queueName = 'redis_queue';
 
 	protected function __construct(array $config){
@@ -55,7 +55,7 @@ class CacheRedis extends CacheAdapter{
 	 * @param $cache_key
 	 * @param $data
 	 * @param int $expired
-	 * @return bool|mixed
+	 * @return bool
 	 */
 	public function set($cache_key, $data, $expired = 60){
 		$data = serialize($data);
@@ -74,7 +74,7 @@ class CacheRedis extends CacheAdapter{
 
 	/**
 	 * @param $cache_key
-	 * @return mixed|void
+	 * @return void
 	 */
 	public function delete($cache_key){
 		$this->redis->del($cache_key);
@@ -88,7 +88,7 @@ class CacheRedis extends CacheAdapter{
 	}
 
 	/**
-	 * 设置队列名称
+	 * Set queue name
 	 * @param $queueName
 	 * @return \LFPhp\Cache\CacheRedis
 	 */
@@ -98,23 +98,23 @@ class CacheRedis extends CacheAdapter{
 	}
 
 	/**
-	 * 取得队列的长度
+	 * Get queue size
 	 */
 	public function lSize(){
 		return $this->redis->lLen($this->queueName);
 	}
 
 	/**
-	 * 从队列中取出多少个数据
-	 * @param $num
-	 * @return mixed
+	 * Get data
+	 * @param int $num
+	 * @return array
 	 */
 	public function lRang($num){
 		return $this->redis->lRange($this->queueName, 0, $num);
 	}
 
 	/**
-	 * 给队列添加一个数据
+	 * Push item
 	 * @param $value
 	 * @return bool|int
 	 */
@@ -123,17 +123,17 @@ class CacheRedis extends CacheAdapter{
 	}
 
 	/**
-	 * 从队列中取出一个数据
+	 * Pop Item
 	 */
 	public function lPop(){
 		return $this->redis->lPop($this->queueName);
 	}
 
 	/**
-	 * 从队列中删除数据
+	 * Trim queue
 	 * @param number $start 开始index
 	 * @param number $stop 结束index
-	 * @return mixed
+	 * @return array|false
 	 */
 	public function lTrim($start, $stop){
 		return $this->redis->lTrim($this->queueName, $start, $stop);

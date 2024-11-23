@@ -2,13 +2,11 @@
 namespace LFPhp\Cache;
 
 /**
-* User: Sasumi
-* Date: 2015/10/19
-* Time: 20:20
+ * Cache Interface
 */
 interface CacheInterface {
 	/**
-	 * 设置缓存接口
+	 * Set cache
 	 * @param $cache_key
 	 * @param $data
 	 * @param int $expired
@@ -17,21 +15,20 @@ interface CacheInterface {
 	public function set($cache_key, $data, $expired=60);
 
 	/**
-	 * 获取数据接口
+	 * Get cache
 	 * @param $cache_key
 	 * @return mixed
 	 */
 	public function get($cache_key);
 
 	/**
-	 * 删除缓存接口
+	 * Delete cache
 	 * @param $cache_key
-	 * @return mixed
 	 */
 	public function delete($cache_key);
 
 	/**
-	 * 清空整个缓存区域接口
+	 * Flush cache
 	 * @return mixed
 	 */
 	public function flush();

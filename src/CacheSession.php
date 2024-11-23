@@ -5,7 +5,7 @@ use function LFPhp\Func\session_start_once;
 use function LFPhp\Func\session_write_once;
 
 /**
- * Session缓存
+ * Session Cache
  * Class CacheSession
  * @package LFPhp\Cache
  */

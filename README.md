@@ -1,11 +1,11 @@
-# 缓存库
-> 当前库基于PHP5.6以上环境测试。
+# Cache library
+> The current library is tested based on PHP5.6 and above.
 >
-## 安装
-1. PHP 版本大于或等于 5.6
-2. 必须安装扩展：mb_string、curl、json、dom
+## Installation
+1. PHP version greater than or equal to 5.6
+2. Extensions must be installed: mb_string, curl, json, dom
 
-请使用Composer进行安装：
+Please use Composer to install:
 ```shell script
 composer require lfphp/cache
 ```
